@@ -65,6 +65,14 @@ def _extract_tags(html):
 
     >>> _extract_tags('Python <strong>rocks</strong>!')
     ['<strong>', '</strong>']
+    >>> _extract_tags('<a href="www.something">link this</a>')
+    ['<a>', '</a>']
     '''
     tags = re.findall(r'<.*?>', html)
-    return tags
+    t_no_atrb = []  # creates a list of tags without the attributes
+    for tag in tags:
+        if re.match(r'^</', tag) is None:
+            tm = re.match(r'^<\w+', tag)
+            tag = tm.group(0) + ">"
+        t_no_atrb.append(tag)
+    return t_no_atrb
